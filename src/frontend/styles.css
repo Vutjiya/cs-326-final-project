@@ -1,0 +1,116 @@
+/* TODO: organize css */
+body, html {
+    margin-left: 200px;
+    margin-right: 200px;
+    margin-top: 20px;
+    margin-bottom: 50%;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+}
+
+nav {
+    background-color: #fff;
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+nav button, input[type="submit"] {
+    background-color: #881c1c;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    margin: 0 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+nav button:hover, input[type="submit"]:hover {
+    background-color: #5f1414;
+}
+
+/* input[type="submit"] {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+} */
+
+#views {
+    padding: 20px;
+    text-align: left;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.view {
+    display: none;
+    /* Hide all views by default */
+}
+
+@keyframes wiggle {
+    0% {
+        transform: rotate(-5deg);
+    }
+
+    50% {
+        transform: rotate(5deg);
+    }
+
+    100% {
+        transform: rotate(-5deg);
+    }
+}
+
+button:hover, input[type="submit"]:hover {
+    animation: wiggle 0.5s ease-in-out infinite;
+}
+
+input {
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+input.box:invalid:not(:placeholder-shown) {
+    border: 2px solid red;
+}
+
+input.box:valid {
+    border: 2px solid green;
+}
+
+input.box:invalid:not(:placeholder-shown) + span::after {
+    content: "✖";
+    color: red;
+    padding-left: 5px;
+}
+
+input.box:valid + span::after {
+    content: "✓";
+    color: green;
+    padding-left: 5px;
+}
+
+h1 {
+    text-align: center;
+}
+
+img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}
+
+.colored-block {
+    background-color: #881c1c; 
+    color: white;
+    padding: 10px; 
+    margin-bottom: 20px;
+    border-radius: 5px;
+}

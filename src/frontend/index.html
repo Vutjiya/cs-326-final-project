@@ -1,19 +1,84 @@
 <!DOCTYPE html>
-<html>
+
+<html lang="en">
     <head>
-        <title>
-            My Web Application
-        </title>
+        <meta charset="UTF-8">
+        <!-- TODO: change title -->
+        <title>My Web Application</title>
+        <link rel="stylesheet" href="styles.css">
+        <script type="module" src="app.js"></script>
     </head>
     <body>
-        <header>
-            <h1>
-                Welcome to My Web Application 
-            </h1>
-        </header>
-        <p>
-            This is a simple test HTML file to get you started with your project.
-        </p>
-        <button id="testButton">Click Me</button>
+        <div class="colored-block">
+            <h1>UMass Student Rideshares</h1>
+        </div>
+        <nav>
+            <button id="home">Home</button>
+            <button id="request">Request a Ride</button>
+            <button id="profile">My Profile</button>
+        </nav>
+        <div id="views">
+            <div id="home-view" class="view">
+                <h1>Welcome Home!</h1>
+                <img src="https://www.insurancenavy.com/images/do-rideshare-drivers-get-paid-for-tolls.png">
+            </div>
+            <div id="request-view" class="view"">
+                <div class="colored-block">
+                    <h1>Request a Ride</h1>
+                </div>
+                <form class="request">
+                    <div class="user-input request">
+                        <label for="destination">Destination:</label>
+                        <input id="destination" class="user-input request box" type="text" name="destination" placeholder="Destination" list="municipalities">
+                        <datalist id="municipalities"></datalist>
+                    </div>
+                    <div class="user-input request">
+                        <label for="departure">Departure Date and Time:</label>
+                        <input id="departure" class="user-input request box" type="datetime-local" name="datetime">
+                    </div>
+                    <input type="submit" value="Submit Request">
+                </form>
+                <div id="submitted-requests">
+                    <!-- TODO: dynamically add and display submitted requests -->
+                </div>
+            </div>
+            <div id="profile-view" class="view">
+                <div class="colored-block">
+                    <h1>Profile Information</h1>
+                </div>
+                <form class="profile">
+                    <div class="user-input profile">
+                        <label for="first-name">First Name:</label>
+                        <input id="first-name" class="user-input profile box" type="text" name="first-name" placeholder="Johnny">
+                    </div>
+                    <div class="user-input profile">
+                        <label for="last-name">Last Name:</label>
+                        <input id="last-name" class="user-input profile box" type="text" name="last-name" placeholder="Appleseed">
+                    </div>
+                    <div class="user-input profile">
+                        <label for="email">Email:</label>
+                        <input id="email" class="user-input profile box" type="email" name="email" pattern="^[a-zA-Z0-9._%+-]+@umass\.edu$" placeholder="jappleseed@umass.edu">
+                    </div>
+                    <div class="user-input profile">
+                        <label for="phone-number">Phone Number:</label>
+                        <input id="phone-number" class="user-input profile box" type="tel" name="phone-number" pattern="\d{3}-\d{3}-\d{4}" placeholder="123-456-7899">
+                    </div>
+                    <div class="user-input profile">
+                        <label for="hometown">Hometown:</label>
+                        <input id="hometown" class="user-input profile box" type="text" name="hometown" placeholder="Hometown" list="municipalities">
+                        <datalist id="municipalities"></datalist>
+                    </div>
+                    <div class="user-input profile">
+                        <label for="availability">Availability:</label>
+                        <input id="availability" class="user-input profile box" type="datetime-local" name="availability">
+                    </div>
+                    <div class="user-input profile">
+                        <label for="distance">Distance willing to Travel (km):</label>
+                        <input id="distance" class="user-input profile box" type="number" min="1" max="440" name="distance" placeholder="1">
+                    </div>
+                    <input id="save-profile" type="submit" value="Save Profile">
+                </form>
+            </div>
+        </div>
     </body>
 </html>
