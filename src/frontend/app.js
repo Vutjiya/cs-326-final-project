@@ -107,6 +107,7 @@ function getCurrDatetime() {
 }
 
 // Makes sure you cannot select a date and time before the current data and time
+// for departure and availability forms boxes
 document.getElementById("departure").addEventListener("click", () => {
     document.getElementById("departure").min = getCurrDatetime();
 });
@@ -114,10 +115,3 @@ document.getElementById("departure").addEventListener("click", () => {
 document.getElementById("availability").addEventListener("click", () => {
     document.getElementById("availability").min = getCurrDatetime();
 });
-
-// TODO: input should only be validated by user input is complete
-// TODO: add in local storage
-// TODO: add x to hometown + destination view
-// TODO: add available days to profile view
-// TODO: get rid of repetition in html file via dynamic DOM
-// TODO: default to home view when loading in app
