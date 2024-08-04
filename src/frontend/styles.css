@@ -40,19 +40,20 @@ nav button:hover, input[type="submit"]:hover {
     width: 50%;
 } */
 
-#views {
+.view {
     padding: 20px;
     text-align: left;
     background-color: #fff;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* margin-bottom: 150px; */
     /* width: 80%;
     height: max-content;
     margin: auto; */
 }
 
 .view {
-    display: none;
+    /* display: none; */
     /* Hide all views by default */
 }
 
@@ -130,4 +131,13 @@ img {
 .colored-block h1 {
     margin: 2%;
     flex: 1;
+}
+
+.additional-block {
+    padding: 20px;
+    text-align: left;
+    background-color: #fff; /* Same as .view */
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Same as .view */
+    margin-top: 20px;
 }
