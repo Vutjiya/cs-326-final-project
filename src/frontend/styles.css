@@ -40,7 +40,7 @@ nav button:hover, input[type="submit"]:hover {
     width: 50%;
 } */
 
-#views {
+.view {
     padding: 20px;
     text-align: left;
     background-color: #fff;
@@ -52,7 +52,7 @@ nav button:hover, input[type="submit"]:hover {
 }
 
 .view {
-    display: none;
+    /* display: none; */
     /* Hide all views by default */
 }
 

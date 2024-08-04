@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <!-- TODO: change title -->
+        <title>My Web Application</title>
+        <link rel="stylesheet" href="styles.css">
+        <script type="module" src="app.js"></script>
+    </head>
+    <body>
+        <div class="colored-block">
+            <h1>UMass Student Rideshares</h1>
+        </div>
+        <nav>
+            <button id="home">Home</button>
+            <button id="request">Request a Ride</button>
+            <button id="profile">My Profile</button>
+        </nav>
+        <div id="views">
+            <div id="home-view" class="view">
+                <div class="colored-block">
+                    <h1>Welcome!</h1>
+                    <!-- <img src="https://ucnj.org/wp-content/uploads/2015/08/14938-illustration-of-a-yellow-house-pv.png"> -->
+                </div>
+                <img src="https://media.rideguru.com/uploads/Rideshare%20101%20Images/rg-101-image-section1.png">
+                <!-- <img src="https://www.insurancenavy.com/images/do-rideshare-drivers-get-paid-for-tolls.png"> -->
+                <p>
+                    Welcome to the UMass Ridesharing App! Press "Request a Ride" to request a ride from a driver, 
+                    or edit your profile and enlist to be a driver by clicking "My profile".
+                </p>
+                <h2>Requesting a Ride</h2>
+                <p>
+                    To request a ride, simply click the "Request a Ride" button on the navigate bar. 
+                    You will then be prompted to select a destination and time of departure. When you finish 
+                    filling out your request, press the "Submit Request" button, and you're done!
+                </p>
+                <h2>Your Profile</h2>
+                <p>
+                    Your profile includes your general information that will be displayed to people requesting 
+                    a ride if you are enlist to be a driver. Your information will also be displayed to drivers 
+                    when they choose to accept your request. 
+                </p>
+                Note: not UMass affiliated
+            </div>
+            <div id="request-view" class="view"">
+                <div class="colored-block">
+                    <h1>Request a Ride</h1>
+                    <img class="header-img" src="https://static.vecteezy.com/system/resources/previews/018/974/668/original/cartoon-car-icon-png.png">
+                </div>
+                <form class="request">
+                    <div class="user-input request">
+                        <label for="destination">Destination:</label>
+                        <input id="destination" class="user-input request box" type="text" name="destination" placeholder="Destination" list="municipalities">
+                        <datalist id="municipalities"></datalist>
+                    </div>
+                    <div class="user-input request">
+                        <label for="departure">Departure Time:</label>
+                        <input id="departure" class="user-input request box" type="datetime-local" name="datetime">
+                    </div>
+                    <input class="submit" type="submit" value="Submit Request">
+                </form>
+                <div id="submitted-requests">
+                    <!-- TODO: dynamically add and display submitted requests -->
+                </div>
+            </div>
+            <div id="profile-view" class="view">
+                <div class="colored-block">
+                    <h1>Profile Information</h1>
+                    <img id="profile-img" class="header-img" src="https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG-Image.png">
+                </div>
+                <form class="profile">
+                    <div class="user-input profile">
+                        <label for="first-name">First Name:</label>
+                        <input id="first-name" class="user-input profile box" type="text" name="first-name" placeholder="Johnny">
+                    </div>
+                    <div class="user-input profile">
+                        <label for="last-name">Last Name:</label>
+                        <input id="last-name" class="user-input profile box" type="text" name="last-name" placeholder="Appleseed">
+                    </div>
+                    <div class="user-input profile">
+                        <label for="email">Email:</label>
+                        <input id="email" class="user-input profile box" type="email" name="email" placeholder="jappleseed@umass.edu">
+                    </div>
+                    <div class="user-input profile">
+                        <label for="phone-number">Phone Number:</label>
+                        <input id="phone-number" class="user-input profile box" type="tel" name="phone-number" pattern="\d{3}-\d{3}-\d{4}" placeholder="123-456-7899">
+                    </div>
+                    <div class="user-input profile">
+                        <label for="driver-checkbox">Enlist to be a driver?</label>
+                        <input id="driver-checkbox" class="optional" type="checkbox">
+                    </div>
+                    <input id="save-profile" type="submit" value="Save Profile">
+                </form>
+            </div>
+        </div>
+    </body>
+</html>
