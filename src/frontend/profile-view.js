@@ -1,4 +1,5 @@
 import { Events } from "./events.js";
+import { Form } from "./form.js";
 
 export class ProfileView {
     constructor() {}
@@ -21,99 +22,22 @@ export class ProfileView {
         blockHeader.appendChild(headerText);
         blockHeader.appendChild(headerImg);
 
-        const form = document.createElement("form");
-        form.id = "profile-form";
+        const form = new Form("profile-form", []);
 
-        const firstNameDiv = document.createElement("div");
+        form.createFormInput("first-name", "First Name:", [], "text", "first-name", null, "Johnny", null, null);
 
-        const firstNameLabel = document.createElement("label");
-        firstNameLabel.htmlFor = "first-name";
-        firstNameLabel.innerText = "First Name: ";
+        form.createFormInput("last-name", "Last Name:", [], "text", "last-name", null, "Appleseed", null, null);
 
-        const firstNameInput = document.createElement("input");
-        firstNameInput.id = "first-name";
-        firstNameInput.type = "text";
-        firstNameInput.name = "first-name";
-        firstNameInput.placeholder = "Johnny";
+        form.createFormInput("email", "Email:", [], "email", "email", null, "jappleseed@umass.edu");
 
-        firstNameDiv.appendChild(firstNameLabel);
-        firstNameDiv.appendChild(firstNameInput);
+        form.createFormInput("phone-number", "Phone Number:", [], "tel", "phone-number", null, "123-456-7899", "\d{3}-\d{3}-\d{4}", null);
 
-        const lastNameDiv = document.createElement("div");
+        form.createFormInput("driver-checkbox", "Enlist to be a driver?", ["optional"], "checkbox", null, null, null, null, null);
 
-        const lastNameLabel = document.createElement("label");
-        lastNameLabel.htmlFor = "last-name";
-        lastNameLabel.innerText = "Last Name: ";
-
-        const lastNameInput = document.createElement("input");
-        lastNameInput.id = "last-name";
-        lastNameInput.type = "text";
-        lastNameInput.name = "last-name";
-        lastNameInput.placeholder = "Appleseed";
-
-        lastNameDiv.appendChild(lastNameLabel);
-        lastNameDiv.appendChild(lastNameInput);
-
-        const emailDiv = document.createElement("div");
-
-        const emailLabel = document.createElement("label");
-        emailLabel.htmlFor = "email";
-        emailLabel.innerText = "Email: "
-
-        const emailInput = document.createElement("input");
-        emailInput.id = "email";
-        emailInput.type = "email";
-        emailInput.name = "email";
-        emailInput.placeholder = "jappleseed@umass.edu";
-
-
-        emailDiv.appendChild(emailLabel);
-        emailDiv.appendChild(emailInput);
-
-        const phoneDiv = document.createElement("div");
-
-        const phoneLabel = document.createElement("label");
-        phoneLabel.htmlFor = "phone-number";
-        phoneLabel.innerText = "Phone Number: ";
-
-        const phoneInput = document.createElement("input");
-        phoneInput.id = "phone-number";
-        phoneInput.type = "tel";
-        phoneInput.name = "phone-number";
-        phoneInput.pattern = "\d{3}-\d{3}-\d{4}";
-        phoneInput.placeholder = "123-456-7899";
-
-        phoneDiv.appendChild(phoneLabel);
-        phoneDiv.appendChild(phoneInput);
-
-        const checkboxDiv = document.createElement("div");
-
-        const checkboxLabel = document.createElement("label");
-        checkboxLabel.htmlFor = "driver-checkbox";
-        checkboxLabel.innerText = "Enlist to be a driver? "
-
-        const checkboxInput = document.createElement("input");
-        checkboxInput.id = "driver-checkbox";
-        checkboxInput.classList.add("optional");
-        checkboxInput.type = "checkbox";
-
-        checkboxDiv.appendChild(checkboxLabel);
-        checkboxDiv.appendChild(checkboxInput);
-
-        const saveButton = document.createElement("input");
-        saveButton.id = "save-profile";
-        saveButton.type = "submit";
-        saveButton.value = "Save Profile";
-
-        form.appendChild(firstNameDiv);
-        form.appendChild(lastNameDiv);
-        form.appendChild(emailDiv);
-        form.appendChild(phoneDiv);
-        form.appendChild(checkboxDiv);
-        form.appendChild(saveButton);
+        form.createFormInput("save-profile", null, ["submit"], "submit", null, "Save Profile", null, null, null);
 
         profileViewElem.appendChild(blockHeader);
-        profileViewElem.appendChild(form);
+        profileViewElem.appendChild(form.form);
 
         return profileViewElem;
     }
