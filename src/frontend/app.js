@@ -49,7 +49,6 @@ export class App {
 
         this.#navigateTo("home");
         this.#events.subscribe("navigateTo", view => this.#navigateTo(view));
-        // TODO: create form object for 2 views?
     }
 
     #navigateTo(view) {

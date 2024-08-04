@@ -25,13 +25,27 @@ export class RequestView {
 
         const form = new Form("request-form", []);
 
-        form.createTextInput("destination", "Destination", [], "destination", "Destination", "municipalities", municipalities);
-        form.createDatatimeInput("departure", "Departure Time", [], "departure");
-        form.createSubmitInput("submit-button", ["submit"], "Submit Request");
+        const destination = form.createTextInput("destination", "Destination", [], "destination", "Destination", "municipalities", municipalities);
+        const departure = form.createDatatimeInput("departure", "Departure Time", [], "departure");
+        const submitButton = form.createSubmitInput("submit-button", ["submit"], "Submit Request");
 
         requestViewElem.appendChild(blockHeader);
-        requestViewElem.appendChild(await form.render())
+        [destination, departure, submitButton].forEach(elem => 
+            requestViewElem.appendChild(elem)
+        );
+
+        const block = document.createElement("div");
+        block.classList.add("view");
+        const p = document.createElement("p");
+        p.textContent = `The quick brown fox jumped over the lazy dog`
+        block.appendChild(p);
+        requestViewElem.appendChild(block);
 
         return requestViewElem;
     }
+}
+
+export class Requests {
+
+
 }

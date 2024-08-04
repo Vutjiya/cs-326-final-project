@@ -24,15 +24,32 @@ export class ProfileView {
 
         const form = new Form("profile-form", []);
 
-        form.createTextInput("first-name", "First Name", [], "first-name", "Johnny");
-        form.createTextInput("last-name", "Last Name", [], "last-name", "Appleseed");
-        form.createEmailInput("email", "Email", [], "email", "jappleseed@umass.edu");
-        form.createTelInput("phone-number", "Phone Number", [], "phone-number", "123-456-7899");
-        form.createCheckboxInput("driver-checkbox", "Enlist to be a Driver", ["optional"]);
-        form.createSubmitInput("save-profile", ["submit"], "Save Profile");
+        const firstName = form.createTextInput("first-name", "First Name", [], "first-name", "Johnny");
+        const lastName = form.createTextInput("last-name", "Last Name", [], "last-name", "Appleseed");
+        const email = form.createEmailInput("email", "Email", [], "email", "jappleseed@umass.edu");
+        const phone = form.createTelInput("phone-number", "Phone Number", [], "phone-number", "123-456-7899");
+        const checkbox = form.createCheckboxInput("driver-checkbox", "Enlist to be a Driver", ["optional"]);
+        const submitButton = form.createSubmitInput("save-profile", ["submit"], "Save Profile");
 
         profileViewElem.appendChild(blockHeader);
-        profileViewElem.appendChild(await form.render());
+        [firstName, lastName, email, phone, checkbox, submitButton].forEach(elem => 
+            profileViewElem.appendChild(elem)
+        );
+
+        checkbox.addEventListener("click", e => {
+            const target = e.target;
+            
+            if (target.checked) {
+                const availability = form.createDatatimeInput("availability", "Availability", [], "availability");
+                const distance = form.createNumberInput("distance", "Service Distance (km)", [], "distance", 1, 500);
+
+                target.parentNode.insertAdjacentElement("afterend", availability);
+                availability.insertAdjacentElement("afterend", distance);
+            } else {
+                form.deleteFormInput("availability");
+                form.deleteFormInput("distance");
+            }
+        });
 
         return profileViewElem;
     }

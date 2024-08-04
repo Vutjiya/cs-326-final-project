@@ -19,6 +19,7 @@ export class Form {
         const div = document.createElement("div");
         const label = document.createElement("label");
         const input = document.createElement("input");
+        const validity = document.createElement("span");
 
         label.htmlFor = id;
         label.innerText = `${labelText}: `;
@@ -29,8 +30,11 @@ export class Form {
         input.name = name;
         input.placeholder = placeholder;
 
+        validity.classList.add("validity");
+
         div.appendChild(label);
         div.appendChild(input);
+        div.appendChild(validity);
 
         if (datalist_id) {
             this.createDatalistInput(datalist_id, div, input, data)
@@ -40,13 +44,16 @@ export class Form {
             input.required = true;
         }
 
-        this.form.appendChild(div);
+        // this.form.appendChild(div);
+
+        return div;
     }
 
     createDatatimeInput(id, labelText, classes, name) {
         const div = document.createElement("div");
         const label = document.createElement("label");
         const input = document.createElement("input");
+        const validity = document.createElement("span");
 
         label.htmlFor = id;
         label.innerText = `${labelText}: `;
@@ -61,16 +68,22 @@ export class Form {
             input.required = true;
         }
 
+        validity.classList.add("validity");
+
         div.appendChild(label);
         div.appendChild(input);
+        div.appendChild(validity);
 
-        this.form.appendChild(div);
+        // this.form.appendChild(div);
+
+        return div;
     }
 
     createTelInput(id, labelText, classes, name, placeholder) {
         const div = document.createElement("div");
         const label = document.createElement("label");
         const input = document.createElement("input");
+        const validity = document.createElement("span");
 
         label.htmlFor = id;
         label.innerText = `${labelText}: `;
@@ -86,10 +99,15 @@ export class Form {
             input.required = true;
         }
 
+        validity.classList.add("validity");
+
         div.appendChild(label);
         div.appendChild(input);
+        div.appendChild(validity);
 
-        this.form.appendChild(div);
+        // this.form.appendChild(div);
+
+        return div;
     }
 
     createSubmitInput(id, classes, value) {
@@ -100,7 +118,8 @@ export class Form {
         input.type = "submit";
         input.value = value;
 
-        this.form.appendChild(input);
+        // this.form.appendChild(input);
+        return input;
     }
 
     createCheckboxInput(id, labelText, classes) {
@@ -122,15 +141,16 @@ export class Form {
         div.appendChild(label);
         div.appendChild(input);
 
-        this.form.appendChild(div);
+        // this.form.appendChild(div);
 
+        return div;
     }
 
-    // TODO: accept only umass emails
-    createEmailInput(id, labelText, classes, name, placeholder, pattern) {
+    createEmailInput(id, labelText, classes, name, placeholder) {
         const div = document.createElement("div");
         const label = document.createElement("label");
         const input = document.createElement("input");
+        const validity = document.createElement("span");
 
         label.htmlFor = id;
         label.innerText = `${labelText}: `;
@@ -140,16 +160,21 @@ export class Form {
         input.type = "email";
         input.name = name;
         input.placeholder = placeholder;
-        // input.pattern = pattern;
+        input.pattern = ".+@umass\.edu";
 
         if (!input.classList.contains("optional")) {
             input.required = true;
         }
 
+        validity.classList.add("validity");
+
         div.appendChild(label);
         div.appendChild(input);
+        div.appendChild(validity);
 
-        this.form.appendChild(div);
+        // this.form.appendChild(div);
+        
+        return div;
     }
 
     createDatalistInput(id, div, input, data) {
@@ -165,8 +190,45 @@ export class Form {
             list.appendChild(option);
         });
 
-        // TODO: add event listener
+        input.addEventListener("input", e => {
+            const optionFound = Array.from(e.currentTarget.list.options).some(option => 
+                e.currentTarget.value === option.value);
+    
+            e.currentTarget.setCustomValidity(optionFound ? "" : "Please select a valid city/town.");
+        });
         div.appendChild(list);
+    }
+
+    createNumberInput(id, labelText, classes, name, min, max) {
+        const div = document.createElement("div");
+        const label = document.createElement("label");
+        const input = document.createElement("input");
+        const validity = document.createElement("span");
+
+        label.htmlFor = id;
+        label.innerText = `${labelText}: `;
+
+        input.id = id;
+        input.classList.add(...classes);
+        input.type = "number";
+        input.name = name;
+        input.min = min;
+        input.max = max;
+        input.placeholder = "1";
+
+        if (!input.classList.contains("optional")) {
+            input.required = true;
+        }
+
+        validity.classList.add("validity");
+
+        div.appendChild(label);
+        div.appendChild(input);
+        div.appendChild(validity);
+
+        // this.form.appendChild(div);
+
+        return div;
     }
 
     getCurrDatetime() {
@@ -184,9 +246,7 @@ export class Form {
             curr.value === " " ? acc + "T" : acc + curr.value, "");
     }
 
-    addListener(elem, event, callback) {
-        elem.addEventListener(event, callback);
+    deleteFormInput(id) {
+        document.getElementById(id).parentElement.remove();
     }
-
-    // TODO: create deleteFormInput
 }

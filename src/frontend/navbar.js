@@ -19,15 +19,15 @@ export class Navbar {
 
         // Get all the buttons within the <nav> element
         // const links = elem.querySelectorAll("a");
-        const links = elem.querySelectorAll("button");
+        const buttons = elem.querySelectorAll("button");
 
-        // Add event listeners to each anchor tag 
-        links.forEach(link => {
-            link.addEventListener("click", async e => {
+        // Add event listeners to each button
+        buttons.forEach(button => {
+            button.addEventListener("click", async e => {
                 // Prevent the default button behavior 
                 e.preventDefault();
 
-                // Get the view name from the href attribute
+                // Get the view name from the id attribute
                 const view = e.target.id
 
                 // Update the window/s hash to reflect the current view
