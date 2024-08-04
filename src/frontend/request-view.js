@@ -25,14 +25,12 @@ export class RequestView {
 
         const form = new Form("request-form", []);
 
-        form.createFormInput("destination", "Destination:", [], "text", "destination", null, "Destination", null, "municipalities");
-
-        form.createFormInput("departure", "Departure Time:", [], "datetime-local", "departure", null, null, null, null);
-
-        form.createFormInput("submit-button", null, ["submit"], "submit", null, "Submit Request", null, null, null);
+        form.createTextInput("destination", "Destination", [], "destination", "Destination", "municipalities", municipalities);
+        form.createDatatimeInput("departure", "Departure Time", [], "departure");
+        form.createSubmitInput("submit-button", ["submit"], "Submit Request");
 
         requestViewElem.appendChild(blockHeader);
-        requestViewElem.appendChild(form.form);
+        requestViewElem.appendChild(await form.render())
 
         return requestViewElem;
     }

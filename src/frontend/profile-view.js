@@ -24,20 +24,15 @@ export class ProfileView {
 
         const form = new Form("profile-form", []);
 
-        form.createFormInput("first-name", "First Name:", [], "text", "first-name", null, "Johnny", null, null);
-
-        form.createFormInput("last-name", "Last Name:", [], "text", "last-name", null, "Appleseed", null, null);
-
-        form.createFormInput("email", "Email:", [], "email", "email", null, "jappleseed@umass.edu");
-
-        form.createFormInput("phone-number", "Phone Number:", [], "tel", "phone-number", null, "123-456-7899", "\d{3}-\d{3}-\d{4}", null);
-
-        form.createFormInput("driver-checkbox", "Enlist to be a driver?", ["optional"], "checkbox", null, null, null, null, null);
-
-        form.createFormInput("save-profile", null, ["submit"], "submit", null, "Save Profile", null, null, null);
+        form.createTextInput("first-name", "First Name", [], "first-name", "Johnny");
+        form.createTextInput("last-name", "Last Name", [], "last-name", "Appleseed");
+        form.createEmailInput("email", "Email", [], "email", "jappleseed@umass.edu");
+        form.createTelInput("phone-number", "Phone Number", [], "phone-number", "123-456-7899");
+        form.createCheckboxInput("driver-checkbox", "Enlist to be a Driver", ["optional"]);
+        form.createSubmitInput("save-profile", ["submit"], "Save Profile");
 
         profileViewElem.appendChild(blockHeader);
-        profileViewElem.appendChild(form.form);
+        profileViewElem.appendChild(await form.render());
 
         return profileViewElem;
     }
