@@ -1,4 +1,5 @@
 import { municipalities } from "./municipalities.js";
+import { Script } from "./script.js";
 
 // Helper function to display select view and hide all others
 function navigateTo(viewId) {
@@ -183,3 +184,36 @@ document.getElementById("driver-checkbox").addEventListener("click", (e) => {
         document.getElementById("distance-container").remove();
     }
 });
+
+const form = document.getElementById("request-form");
+// const formData = form.childNodes.reduce((acc, curr) => {
+//     if (curr.type === "input") {
+//         acc[curr.name] = curr.value;
+//     }
+//     return acc
+// }, {});
+// console.log(formData);
+const script = new Script();
+// form.querySelectorAll("")
+form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const data = {};
+    form.querySelectorAll("input").forEach(input => {
+        if (input.type !== "submit") {
+            const name = input.name;
+            const value = input.value;
+            data[name] = value;
+        }
+    });
+    // const data = new FormData(form);
+    console.log(data);
+    // console.log(formData);
+    // const data = event.formData;
+    // console.log(data.entries())
+    console.log("event list!");
+    await script.createRequest(data);
+});
+
+document.getElementById("testing").addEventListener("click", () => {
+    script.viewAll();
+})

@@ -1,18 +1,14 @@
-import { Events } from "./events.js";
+// import { Events } from "./events.js";
 
 export class Script {
-    PORT = 3260;
+    PORT = 3000;
     URL = `http://localhost:${this.PORT}`;
-    #events = null;
-
-    constructor() {
-        this.#events = Events.events();
-    }
 
     // TODO: implement error handling and write documentation
 
     async createRequest(formData) {
         console.log("fetching!");
+        console.log(this.URL);
         const response = await fetch(`${this.URL}/create`, { 
             method: "POST", 
             headers: { 
@@ -62,25 +58,25 @@ export class Script {
         console.log(data);
     }
 
-    // form.addEventListener("submit", async (event) => {
-    //     form.preventDefault();
-    //     event.preventDefault();
-    //     const data = new FormData(form);
-    //     console.log(data)
-    //     console.log("event list!");
-    //     await createRequest(Object.fromEntries(data.entries()))
-    // });
-
-    // #addListener() {
-    //     this.#events.subscribe("req-button-loaded", form => {
-    //         form.addEventListener("submit", async (event) => {
-    //             form.preventDefault();
-    //             event.preventDefault();
-    //             const data = new FormData(form);
-    //             console.log(data);
-    //             console.log("event list!");
-    //             await this.#createRequest(Object.fromEntries(data.entries()));
-    //         });
-    //     });
-    // }
+    async viewAll() {
+        const response = await fetch(`${this.URL}/all`, { 
+            method: "GET", 
+            headers: { 
+                "Content-Type": "application/json" 
+            },
+        });
+        const data = await response.json();
+        console.log(data);
+    }
 }
+
+// const form = document.getElementById("request-form");
+
+// form.addEventListener("submit", async (event) => {
+//     event.preventDefault();
+    
+//     const data = new FormData(form);
+//     console.log(data)
+//     console.log("event list!");
+//     await createRequest(Object.fromEntries(data.entries()));
+// })

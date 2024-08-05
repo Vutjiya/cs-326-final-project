@@ -23,7 +23,7 @@
   },
   "contributors": [],
   "scripts": {
-    "start": "node server.js"
+    "start": "node src/backend/server.js"
   },
   "devDependencies": {
     "http-server": "^14.1.1"
