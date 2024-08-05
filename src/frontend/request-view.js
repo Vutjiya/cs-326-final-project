@@ -30,16 +30,10 @@ export class RequestView {
         const submitButton = form.createSubmitInput("submit-button", ["submit"], "Submit Request");
 
         requestViewElem.appendChild(blockHeader);
+        requestViewElem.appendChild(form.form);
         [destination, departure, submitButton].forEach(elem => 
-            requestViewElem.appendChild(elem)
+            form.form.appendChild(elem)
         );
-
-        const block = document.createElement("div");
-        block.classList.add("view");
-        const p = document.createElement("p");
-        p.textContent = `The quick brown fox jumped over the lazy dog`
-        block.appendChild(p);
-        requestViewElem.appendChild(block);
 
         return requestViewElem;
     }
