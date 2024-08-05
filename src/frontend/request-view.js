@@ -1,9 +1,14 @@
 import { Events } from "./events.js";
 import { Form } from "./form.js";
+import { Script } from "./script.js";
 import { municipalities } from "./municipalities.js";
 
 export class RequestView {
-    constructor() {}
+    #events = null;
+
+    constructor() {
+        this.#events = Events.events();
+    }
 
     async render() {
         const requestViewElem = document.createElement("div");
@@ -34,6 +39,16 @@ export class RequestView {
         [destination, departure, submitButton].forEach(elem => 
             form.form.appendChild(elem)
         );
+
+        const script = new Script();
+        submitButton.addEventListener("click", async (event) => {
+            event.currentTarget.preventDefault();
+            event.preventDefault();
+            const data = new FormData(form);
+            console.log(data)
+            console.log("event list!");
+            await script.createRequest(Object.fromEntries(data.entries()));
+        });
 
         return requestViewElem;
     }

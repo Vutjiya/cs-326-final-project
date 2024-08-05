@@ -2,7 +2,11 @@ import { Events } from "./events.js";
 import { Form } from "./form.js";
 
 export class ProfileView {
-    constructor() {}
+    #events = null;
+    
+    constructor() {
+        this.#events = Events.events();
+    }
 
     async render() {
         const profileViewElem = document.createElement("div");
@@ -32,8 +36,9 @@ export class ProfileView {
         const submitButton = form.createSubmitInput("save-profile", ["submit"], "Save Profile");
 
         profileViewElem.appendChild(blockHeader);
+        profileViewElem.appendChild(form.form);
         [firstName, lastName, email, phone, checkbox, submitButton].forEach(elem => 
-            profileViewElem.appendChild(elem)
+            form.form.appendChild(elem)
         );
 
         checkbox.addEventListener("click", e => {
