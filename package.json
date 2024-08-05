@@ -23,7 +23,7 @@
   },
   "contributors": [],
   "scripts": {
-    "start": "http-server src/frontend -p 300 -c-1 -o -s"
+    "start": "node server.js"
   },
   "devDependencies": {
     "http-server": "^14.1.1"

@@ -114,7 +114,7 @@ document.querySelector("form.request").addEventListener("submit", (e) => {
         form.appendChild(span);
     }
     form.dataset.count = count;
-    e.preventDefault();
+    // e.preventDefault();
 });
 
 // Checks that user input is one of the options in the datalist for all input forms
@@ -183,3 +183,14 @@ document.getElementById("driver-checkbox").addEventListener("click", (e) => {
         document.getElementById("distance-container").remove();
     }
 });
+
+const data = document.getElementById("destination");
+const url = "http://localhost:3000"
+const response = await fetch(`${url}/rainbow`, {
+    method: "POST", 
+    body: JSON.stringify(data),
+    headers: {"Content-type": "application/json"}
+});
+
+const json = await response.json();
+console.log(json.data);
