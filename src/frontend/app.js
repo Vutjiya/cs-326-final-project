@@ -183,14 +183,3 @@ document.getElementById("driver-checkbox").addEventListener("click", (e) => {
         document.getElementById("distance-container").remove();
     }
 });
-
-const data = document.getElementById("destination");
-const url = "http://localhost:3000"
-const response = await fetch(`${url}/rainbow`, {
-    method: "POST", 
-    body: JSON.stringify(data),
-    headers: {"Content-type": "application/json"}
-});
-
-const json = await response.json();
-console.log(json.data);
