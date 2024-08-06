@@ -3,17 +3,15 @@
 export class Script {
     PORT = 3000;
     URL = `http://localhost:${this.PORT}`;
+    HEADER_FIELDS = { "Content-Type": "application/json" };
 
     // TODO: implement error handling and write documentation
 
     async createRequest(formData) {
         console.log("fetching!");
-        console.log(this.URL);
         const response = await fetch(`${this.URL}/create`, { 
             method: "POST", 
-            headers: { 
-                "Content-Type": "application/json" 
-            },
+            headers: this.HEADER_FIELDS,
             body: JSON.stringify(formData)
             });
         const data = await response.json();
@@ -21,13 +19,10 @@ export class Script {
     }
 
     async readRequest(formData) {
-        const params = Object.entries(formData).map(([key, val]) => `${key}=${val}`).join("&");
+        const params = new URLSearchParams(formData).toString();
         const response = await fetch(`${this.URL}/read?${params}`, { 
             method: "GET",
-            headers: { 
-                "Content-Type": "application/json" 
-            },
-            // body: JSON.stringify(formData)
+            headers: this.HEADER_FIELDS
         });
         const data = await response.json();
         console.log(data);
@@ -36,9 +31,7 @@ export class Script {
     async updateRequest(formData) {
         const response = await fetch(`${this.URL}/update`, { 
             method: "PUT",
-            headers: { 
-                "Content-Type": "application/json" 
-            },
+            headers: this.HEADER_FIELDS,
             body: JSON.stringify(formData)
         });
         const data = await response.json();
@@ -46,13 +39,10 @@ export class Script {
     }
 
     async deleteRequest(formData) {
-        const params = Object.entries(obj).map(([key, val]) => `${key}=${val}`).join("&");
-        const response = await fetch(`${this.URL}/delete?${params}`, { 
+        const response = await fetch(`${this.URL}/delete`, { 
             method: "DELETE",
-            headers: { 
-                "Content-Type": "application/json" 
-            },
-            // body: JSON.stringify(formData)
+            headers: this.HEADER_FIELDS,
+            body: JSON.stringify(formData)
         });
         const data = await response.json();
         console.log(data);
@@ -61,22 +51,9 @@ export class Script {
     async viewAll() {
         const response = await fetch(`${this.URL}/all`, { 
             method: "GET", 
-            headers: { 
-                "Content-Type": "application/json" 
-            },
+            headers: this.HEADER_FIELDS
         });
         const data = await response.json();
         console.log(data);
     }
 }
-
-// const form = document.getElementById("request-form");
-
-// form.addEventListener("submit", async (event) => {
-//     event.preventDefault();
-    
-//     const data = new FormData(form);
-//     console.log(data)
-//     console.log("event list!");
-//     await createRequest(Object.fromEntries(data.entries()));
-// })

@@ -185,16 +185,73 @@ document.getElementById("driver-checkbox").addEventListener("click", (e) => {
     }
 });
 
+const requestList = document.getElementById("request-list");
+
+function createRequestItem(requestData) {
+    const li = document.createElement("li");
+    const getButton = document.createElement("button");
+    const editButton = document.createElement("button");
+    const delButton = document.createElement("button");
+    const departureStr = parseDateTime(requestData.departure);
+    const div = document.createElement("div");
+
+    li.classList.add("request-item");
+    li.innerHTML = `Destination: ${requestData.destination} <br>
+                    Departure Time: ${departureStr}`;
+
+    getButton.classList.add("button");
+    getButton.innerText = "Get";
+
+    editButton.classList.add("button");
+    editButton.innerText = "Edit";
+
+    delButton.classList.add("button");
+    delButton.innerText = "Delete";
+
+    getButton.addEventListener("click", async event => {
+        await script.readRequest(requestData);
+    });
+
+    editButton.addEventListener("click", async event => {
+        await script.updateRequest(requestData); 
+    });
+
+    delButton.addEventListener("click", async event => {
+        console.log(requestData, "about to delete");
+        await script.deleteRequest(requestData);
+        li.remove();
+    });
+
+    div.appendChild(getButton);
+    div.appendChild(editButton);
+    div.appendChild(delButton);
+    li.appendChild(div);
+    return li;
+}
+
+function parseDateTime(dateTimeString) {
+    const date = new Date(dateTimeString);
+
+    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const months = [
+        'January', 'February', 'March', 'April', 'May', 'June', 'July',
+        'August', 'September', 'October', 'November', 'December'
+    ];
+
+    const dayOfWeek = daysOfWeek[date.getDay()];
+    const month = months[date.getMonth()];
+    const day = date.getDate();
+    const year = date.getFullYear();
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const time = `${hours}:${minutes}`;
+
+    return `${dayOfWeek}, ${month} ${day}, ${year} ${time}`;
+}
+
 const form = document.getElementById("request-form");
-// const formData = form.childNodes.reduce((acc, curr) => {
-//     if (curr.type === "input") {
-//         acc[curr.name] = curr.value;
-//     }
-//     return acc
-// }, {});
-// console.log(formData);
 const script = new Script();
-// form.querySelectorAll("")
+
 form.addEventListener("submit", async (event) => {
     event.preventDefault();
     const data = {};
@@ -205,12 +262,9 @@ form.addEventListener("submit", async (event) => {
             data[name] = value;
         }
     });
-    // const data = new FormData(form);
-    console.log(data);
-    // console.log(formData);
-    // const data = event.formData;
-    // console.log(data.entries())
+
     console.log("event list!");
+    requestList.appendChild(createRequestItem(data));
     await script.createRequest(data);
 });
 

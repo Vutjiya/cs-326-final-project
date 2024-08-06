@@ -7,6 +7,7 @@
         <title>My Web Application</title>
         <link rel="stylesheet" href="styles.css">
         <script type="module" src="app.js"></script>
+        <script type="module" src="script.js"></script>
     </head>
     <body>
         <div class="colored-block">
@@ -56,17 +57,14 @@
                     </div>
                     <div class="user-input request">
                         <label for="departure">Departure Time:</label>
-                        <input id="departure" class="user-input request box" type="datetime-local" name="datetime">
+                        <input id="departure" class="user-input request box" type="datetime-local" name="departure">
                     </div>
                     <input class="submit" type="submit" value="Submit Request">
                 </form>
             </div>
             <div class="additional-block">
                 <h2>Pending Requests</h2>
-                <p>
-                    Here you can add additional information or instructions for requesting a ride.
-                    For example, you might want to explain pricing, rules, or contact details.
-                </p>
+                <ul id="request-list"></ul>
                 <input type="button" id="testing" value="Get All Requests">
             </div>
             <div id="profile-view" class="view">

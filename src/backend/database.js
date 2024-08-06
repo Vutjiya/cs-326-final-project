@@ -3,10 +3,10 @@ import PouchDB from "pouchdb";
 
 const db = new PouchDB("requests");
 
-async function makeRequest(request, datetime) {
+async function makeRequest(request, id) {
     console.log("db creating!");
     try {
-        await db.put({_id: datetime, ...request });
+        await db.put({_id: id, ...request });
     } catch (error) {
         console.log(error);
     }

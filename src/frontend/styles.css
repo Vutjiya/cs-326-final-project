@@ -141,3 +141,15 @@ img {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Same as .view */
     margin-top: 20px;
 }
+
+li {
+    background-color: white;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-block-start: 0;
+  }
