@@ -18,7 +18,7 @@ nav {
     margin-bottom: 20px;
 }
 
-nav button, input[type="submit"] {
+nav button, input[type="submit"], button {
     background-color: #881c1c;
     border: none;
     color: white;
@@ -27,9 +27,11 @@ nav button, input[type="submit"] {
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    width: fit-content;
+    height: fit-content;
 }
 
-nav button:hover, input[type="submit"]:hover {
+nav button:hover, input[type="submit"]:hover, button:hover {
     background-color: #5f1414;
 }
 
@@ -136,10 +138,16 @@ img {
 .additional-block {
     padding: 20px;
     text-align: left;
-    background-color: #fff; /* Same as .view */
+    background-color: #fff; 
     border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Same as .view */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
     margin-top: 20px;
+}
+
+ul {
+    list-style-type: none; /* Remove bullet points */
+    padding: 0; /* Remove padding from the list */
+    margin: 0; 
 }
 
 li {
@@ -149,7 +157,35 @@ li {
     border: 1px solid #ccc;
     border-radius: 4px;
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
     align-items: center;
     margin-block-start: 0;
-  }
+}
+
+.li-buttons {
+    /* border: 1px solid black; */
+    height: 50px;
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.li-button {
+    margin-right: 20px;
+}
+
+#get-all-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#get-all-button {
+    /* width: fit-content;
+    height: fit-content; */
+    margin-bottom: 20px;
+    align-items: center;
+}

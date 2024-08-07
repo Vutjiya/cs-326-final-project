@@ -8,14 +8,13 @@ export class Script {
     // TODO: implement error handling and write documentation
 
     async createRequest(formData) {
-        console.log("fetching!");
         const response = await fetch(`${this.URL}/create`, { 
             method: "POST", 
             headers: this.HEADER_FIELDS,
             body: JSON.stringify(formData)
-            });
-        const data = await response.json();
-        console.log(data);
+        });
+        const { destination, departure } = await response.json();
+        return { destination, departure };
     }
 
     async readRequest(formData) {
@@ -25,7 +24,7 @@ export class Script {
             headers: this.HEADER_FIELDS
         });
         const data = await response.json();
-        console.log(data);
+        return data;
     }
 
     async updateRequest(formData) {
@@ -35,7 +34,7 @@ export class Script {
             body: JSON.stringify(formData)
         });
         const data = await response.json();
-        console.log(data);
+        return data;
     }
 
     async deleteRequest(formData) {
@@ -45,7 +44,7 @@ export class Script {
             body: JSON.stringify(formData)
         });
         const data = await response.json();
-        console.log(data);
+        return data;
     }
 
     async viewAll() {
@@ -54,6 +53,6 @@ export class Script {
             headers: this.HEADER_FIELDS
         });
         const data = await response.json();
-        console.log(data);
+        return data.requests;
     }
 }

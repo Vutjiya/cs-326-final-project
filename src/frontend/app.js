@@ -79,15 +79,15 @@ document.querySelectorAll("div.user-input.profile input").forEach(inputBox => {
     });
 });
 
-// Removes the "Request Submitted" message if the form has been updated
-document.querySelectorAll("div.user-input.request input").forEach(inputBox => {
-    inputBox.addEventListener("input", () => {
-        const requestMsgElm = document.getElementById("request-msg");
-        if (requestMsgElm) {
-            requestMsgElm.remove();
-        }
-    });
-});
+// // Removes the "Request Submitted" message if the form has been updated
+// document.querySelectorAll("div.user-input.request input").forEach(inputBox => {
+//     inputBox.addEventListener("input", () => {
+//         const requestMsgElm = document.getElementById("request-msg");
+//         if (requestMsgElm) {
+//             requestMsgElm.remove();
+//         }
+//     });
+// });
 
 // Saves profile info when clicking save profile button
 document.getElementById("save-profile").addEventListener("click", saveState);
@@ -104,29 +104,31 @@ document.querySelector("form.profile").addEventListener("submit", (e) => {
     e.preventDefault();
 });
 
-// Shows pop up when clicking request ride button
-document.querySelector("form.request").addEventListener("submit", (e) => {
-    const form = e.currentTarget
-    let count = form.dataset.count ? parseInt(form.dataset.count) : 0;
-    if (!document.getElementById("request-msg")) {
-        const span = document.createElement("span");
-        span.id = "request-msg";
-        span.innerText = `Request Submitted!\n\nYou have submitted ${++count} request(s).`;
-        form.appendChild(span);
-    }
-    form.dataset.count = count;
-    // e.preventDefault();
-});
+// // Shows pop up when clicking request ride button
+// document.querySelector("form.request").addEventListener("submit", (e) => {
+//     const form = e.currentTarget
+//     let count = form.dataset.count ? parseInt(form.dataset.count) : 0;
+//     if (!document.getElementById("request-msg")) {
+//         const span = document.createElement("span");
+//         span.id = "request-msg";
+//         span.innerText = `Request Submitted!\n\nYou have submitted ${++count} request(s).`;
+//         form.appendChild(span);
+//     }
+//     form.dataset.count = count;
+//     // e.preventDefault();
+// });
 
 // Checks that user input is one of the options in the datalist for all input forms
-document.querySelectorAll("input[list]").forEach(input => {
-    input.addEventListener("input", (e) => {
-        const optionFound = Array.from(e.currentTarget.list.options).some(option => 
-            e.currentTarget.value === option.value);
-
-        e.currentTarget.setCustomValidity(optionFound ? "" : "Please select a valid city/town.");
+function isValidDestination() {
+    document.querySelectorAll("input[list]").forEach(input => {
+        input.addEventListener("input", (e) => {
+            const optionFound = Array.from(e.currentTarget.list.options).some(option => 
+                e.currentTarget.value === option.value);
+    
+            e.currentTarget.setCustomValidity(optionFound ? "" : "Please select a valid city/town.");
+        });
     });
-});
+}
 
 
 // Gets the current date and time (EST) in ISO format (YYYY-MM-DDThh:mm)
@@ -185,7 +187,8 @@ document.getElementById("driver-checkbox").addEventListener("click", (e) => {
     }
 });
 
-const requestList = document.getElementById("request-list");
+const latestRequest = document.getElementById("latest-request");
+const allRequestsList = document.getElementById("all-requests-list");
 
 function createRequestItem(requestData) {
     const li = document.createElement("li");
@@ -194,30 +197,65 @@ function createRequestItem(requestData) {
     const delButton = document.createElement("button");
     const departureStr = parseDateTime(requestData.departure);
     const div = document.createElement("div");
+    div.classList.add("li-buttons");
 
     li.classList.add("request-item");
     li.innerHTML = `Destination: ${requestData.destination} <br>
                     Departure Time: ${departureStr}`;
 
-    getButton.classList.add("button");
+    getButton.classList.add("li-button");
     getButton.innerText = "Get";
 
-    editButton.classList.add("button");
+    editButton.classList.add("li-button");
     editButton.innerText = "Edit";
 
-    delButton.classList.add("button");
+    delButton.classList.add("li-button");
     delButton.innerText = "Delete";
 
-    getButton.addEventListener("click", async event => {
+    getButton.addEventListener("click", async (event) => {
         await script.readRequest(requestData);
     });
 
-    editButton.addEventListener("click", async event => {
-        await script.updateRequest(requestData); 
+    editButton.addEventListener("click", async (event) => {
+        // TODO: form is not validated
+        li.innerHTML = 
+        `<form id="update-form" class="request">
+            <div class="user-input request">
+                <label for="destination">Destination:</label>
+                <input id="destination" class="user-input request box" type="text" name="destination" placeholder="Destination" list="municipalities" required>
+                <span class="validity"></span>
+                <datalist id="municipalities"></datalist>
+            </div>
+            <div class="user-input request">
+                <label for="departure">Departure Time:</label>
+                <input id="departure" class="user-input request box" type="datetime-local" min=${getCurrDatetime()} name="departure" required>
+                <span class="validity"></span>
+            </div>
+            <button id="cancel" type="button">Cancel</button>
+            <button form="update-form">Update Request</button>
+        </form>`;
+        isValidDestination();
+        document.getElementById("cancel").addEventListener("click", async (event) => {
+            li.replaceWith(createRequestItem(requestData));
+        });
+
+        document.getElementById("update-form").addEventListener("submit", async (event) => {
+            event.preventDefault();
+            const newRequest = {};
+            event.currentTarget.querySelectorAll("input").forEach(input => {
+                if (input.type !== "submit") {
+                    const name = input.name;
+                    const value = input.value;
+                    newRequest[name] = value;
+                }
+            });
+
+            const data = await script.updateRequest({ requestData, newRequest });
+            li.replaceWith(createRequestItem(data));
+        });
     });
 
-    delButton.addEventListener("click", async event => {
-        console.log(requestData, "about to delete");
+    delButton.addEventListener("click", async (event) => {
         await script.deleteRequest(requestData);
         li.remove();
     });
@@ -232,21 +270,21 @@ function createRequestItem(requestData) {
 function parseDateTime(dateTimeString) {
     const date = new Date(dateTimeString);
 
-    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     const months = [
-        'January', 'February', 'March', 'April', 'May', 'June', 'July',
-        'August', 'September', 'October', 'November', 'December'
+        "January", "February", "March", "April", "May", "June", "July",
+        "August", "September", "October", "November", "December"
     ];
 
     const dayOfWeek = daysOfWeek[date.getDay()];
     const month = months[date.getMonth()];
     const day = date.getDate();
     const year = date.getFullYear();
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const hours = date.getHours().toString().padStart(2, "0");
+    const minutes = date.getMinutes().toString().padStart(2, "0");
     const time = `${hours}:${minutes}`;
 
-    return `${dayOfWeek}, ${month} ${day}, ${year} ${time}`;
+    return `${dayOfWeek}, ${month} ${day}, ${year}, ${time} EST`;
 }
 
 const form = document.getElementById("request-form");
@@ -254,20 +292,31 @@ const script = new Script();
 
 form.addEventListener("submit", async (event) => {
     event.preventDefault();
-    const data = {};
+    const formData = {};
     form.querySelectorAll("input").forEach(input => {
         if (input.type !== "submit") {
             const name = input.name;
             const value = input.value;
-            data[name] = value;
+            formData[name] = value;
         }
     });
 
-    console.log("event list!");
-    requestList.appendChild(createRequestItem(data));
-    await script.createRequest(data);
+    const data = await script.createRequest(formData);
+    latestRequest.replaceChildren(createRequestItem(data))
 });
 
-document.getElementById("testing").addEventListener("click", () => {
-    script.viewAll();
+document.getElementById("get-all-button").addEventListener("click", async (e) => {
+    const getAllButton = e.currentTarget;
+
+    if (getAllButton.classList.toggle("added-all")) {
+        getAllButton.innerText = "Hide All Requests"
+
+        const requests = await script.viewAll();
+        Object.values(requests).forEach(request => {
+            allRequestsList.appendChild(createRequestItem(request));
+        });
+    } else {
+        getAllButton.innerText = "View All Requests"
+        allRequestsList.replaceChildren();
+    }
 })

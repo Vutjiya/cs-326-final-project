@@ -16,11 +16,10 @@ app.use(express.static("src/frontend"));
 app
     .route("/create")
     .post(async (req, res) => {
-        console.log("app posting!");
         const { destination , departure } = req.body;
 
         try {
-            await db.makeRequest(req.body, departure);
+            await db.makeRequest(`${destination}${departure}`, req.body);
             res.status(200).json({ 
                 status: "success", 
                 destination: destination,
@@ -36,37 +35,41 @@ app
     .route("/read")
     .get(async (req, res) => {
         const { destination , departure } = req.query;
-        console.log(req.query, "query check!");
+
         try {
-            await db.fetchRequest(departure);
+            const request = (await db.fetchAllRequests()).find(request => 
+                request.destination === destination && request.departure === departure);
+
             res.status(200).json({ 
                 status: "success", 
-                destination: destination,
-                departure: departure,
+                destination: request.destination,
+                departure: request.departure,
                 message: `Request fetched!` 
             });
         } catch (error) {
-            res.status(400).json({ message: `Request ${departure} not found` });
+            res.status(400).json({ message: `Request not found` });
         }
     });
 
 app
     .route("/update")
     .put(async (req, res) => {
-        const { destination , departure } = req.body;
-
+        const { requestData, newRequest } = req.body;
+        
         try {
-            const request = await db.fetchRequest(departure);
+            const oldRequest = (await db.fetchAllRequests()).find(request => 
+                request.destination === requestData.destination && 
+                request.departure === requestData.departure);
 
-            await db.modifyRequest(request)
+            await db.modifyRequest(oldRequest, newRequest)
             res.status(200).json({ 
                 status: "success", 
-                destination: destination,
-                departure: departure,
+                destination: newRequest.destination,
+                departure: newRequest.departure,
                 message: `Request updated!` 
             });
         } catch (error) {
-            res.status(400).json({ message: `Request ${departure} not found` });
+            res.status(400).json({ message: `Request not found` });
         }
     });
 
@@ -76,17 +79,18 @@ app
         const { destination , departure } = req.body;
 
         try {
-            const request = await db.fetchRequest(departure);
+            const request = (await db.fetchAllRequests()).find(request => 
+                request.destination === destination && request.departure === departure);
             
             await db.removeRequest(request);
             res.status(200).json({ 
                 status: "success", 
-                destination: destination,
-                departure: departure,
+                destination: request.destination,
+                departure: request.departure,
                 message: `Request deleted!` 
             });
         } catch (error) {
-            res.status(400).json({ message: `Request ${departure} not found` });
+            res.status(400).json({ message: `Request not found` });
         }
     });
 
@@ -94,12 +98,16 @@ app
     .route("/all")
     .get(async (_req, res) => {
         try {
-            const requests = await db.fetchAllRequests();
-            requests.forEach(request => {
-                console.log(request);
-            });
+            const requestList = (await db.fetchAllRequests()).reduce((acc, curr) => {
+                acc[curr._id] = { destination: curr.destination, departure: curr.departure };
+                return acc;
+            }, {});
 
-            res.status(200).json({ message: "All requests loaded!" });
+            res.status(200).json({ 
+                status: "success", 
+                requests: requestList,
+                message: "All requests loaded!" 
+            });
         } catch (error) {
             res.status(500).json({ message: "Unable to load requests" });
         }

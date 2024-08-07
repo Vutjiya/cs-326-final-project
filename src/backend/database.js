@@ -3,8 +3,7 @@ import PouchDB from "pouchdb";
 
 const db = new PouchDB("requests");
 
-async function makeRequest(request, id) {
-    console.log("db creating!");
+async function makeRequest(id, request) {
     try {
         await db.put({_id: id, ...request });
     } catch (error) {
@@ -12,17 +11,17 @@ async function makeRequest(request, id) {
     }
 }
 // TODO: put id/datetime of request in documentation
-async function fetchRequest(id) {
+async function fetchRequest(request) {
     try {
-        return await db.get(id);
+        return await db.get(request._id);
     } catch (error) {
         console.log(error);
     }
 }
 
-async function modifyRequest(request) {
+async function modifyRequest(oldRequest, newRequest) {
     try {
-        await db.put(request)
+        await db.put({ _id: oldRequest._id, _rev: oldRequest._rev, ...newRequest });
     } catch (error) {
         console.log(error);
     }
@@ -30,7 +29,7 @@ async function modifyRequest(request) {
 
 async function removeRequest(request) {
     try {
-        await db.remove(request)
+        await db.remove(request);
     } catch (error) {
         console.log(error);
     }
@@ -38,13 +37,14 @@ async function removeRequest(request) {
 
 async function fetchAllRequests() {
     try {
-        const result = await db.allDocs({ include_docs: true });
-        return result.rows.map((row) => row.doc);
+        return (await db.allDocs({ include_docs: true })).rows.map(row => row.doc);
     } catch (error) {
         console.log(error);
     }
 }
 
-export { makeRequest, fetchRequest, 
-        modifyRequest, removeRequest, 
-        fetchAllRequests };
+export { 
+    makeRequest, fetchRequest, 
+    modifyRequest, removeRequest, 
+    fetchAllRequests 
+};
