@@ -135,14 +135,14 @@ img {
     flex: 1;
 }
 
-.additional-block {
+/* #request-list-block {
     padding: 20px;
     text-align: left;
     background-color: #fff; 
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
     margin-top: 20px;
-}
+} */
 
 ul {
     list-style-type: none; /* Remove bullet points */
@@ -161,6 +161,7 @@ li {
     justify-content: space-between;
     align-items: center;
     margin-block-start: 0;
+    text-align: left;
 }
 
 .li-buttons {
@@ -188,4 +189,9 @@ li {
     height: fit-content; */
     margin-bottom: 20px;
     align-items: center;
+}
+
+#submit-request {
+    display: block;
+    margin: auto;
 }

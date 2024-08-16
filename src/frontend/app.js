@@ -21,13 +21,59 @@ function saveState() {
     document.querySelectorAll(".profile.box").forEach(inputBox => 
         window.localStorage.setItem(inputBox.id, JSON.stringify(inputBox.value))
     );
+
+    document.querySelectorAll("input[type='checkbox']").forEach(checkbox => 
+        window.localStorage.setItem(checkbox.id, checkbox.checked)
+    );
+
+    // document.querySelectorAll(".request.box").forEach(inputBox => 
+    //     window.localStorage.setItem(inputBox.id, JSON.stringify(inputBox.value))
+    // );
+
+    // document.querySelectorAll("input[type='checkbox']").forEach(checkbox => {
+    //     window.localStorage.setItem(checkbox.id, JSON.stringify(checkbox.checked))
+    // });
 }
 
 // Restores info in each form box on profile view
 function restoreState() {
+    document.querySelectorAll("input[type='checkbox']").forEach(checkbox => {
+        const savedState = window.localStorage.getItem(checkbox.id);
+        if (savedState !== null) {
+            checkbox.checked = savedState === "true";
+            if (checkbox.checked) {
+                const availability = document.createElement("div");
+                availability.id = "availability-container";
+                availability.classList.add("user-input", "profile");
+                availability.innerHTML = `
+                    <label for="availability">Availability:</label>
+                    <input id="availability" class="user-input profile box" type="datetime-local" 
+                    min=${getCurrDatetime()} name="availability" required>
+                    <span class="validity"></span>
+                `;
+
+                const distance = document.createElement("div");
+                distance.id = "distance-container";
+                distance.classList.add("user-input", "profile");
+                distance.innerHTML = `
+                    <label for="distance">Service Distance (km):</label>
+                    <input id="distance" class="user-input profile box" type="number" min="1" 
+                    max="500" name="distance" placeholder="1" required>
+                    <span class="validity"></span>
+                `;
+
+                checkbox.parentNode.insertAdjacentElement("afterend", availability);
+                availability.insertAdjacentElement("afterend", distance);
+            }
+    }
+    });
+
     document.querySelectorAll(".profile.box").forEach(inputBox => 
         inputBox.value = JSON.parse(window.localStorage.getItem(inputBox.id))
     );
+
+    // TODO: save state of other two fields also with inner html
+    
 }
 
 // Restore the view from local storage otherwise default to home view
@@ -200,8 +246,9 @@ function createRequestItem(requestData) {
     div.classList.add("li-buttons");
 
     li.classList.add("request-item");
-    li.innerHTML = `Destination: ${requestData.destination} <br>
-                    Departure Time: ${departureStr}`;
+    li.innerHTML = `<b>Destination:</b> ${requestData.destination} <br>
+                    <hr />
+                    <b>Departure Time:</b> ${departureStr}`;
 
     getButton.classList.add("li-button");
     getButton.innerText = "Get";
@@ -217,7 +264,6 @@ function createRequestItem(requestData) {
     });
 
     editButton.addEventListener("click", async (event) => {
-        // TODO: form is not validated
         li.innerHTML = 
         `<form id="update-form" class="request">
             <div class="user-input request">

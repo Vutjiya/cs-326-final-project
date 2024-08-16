@@ -10,7 +10,7 @@ async function makeRequest(id, request) {
         console.log(error);
     }
 }
-// TODO: put id/datetime of request in documentation
+
 async function fetchRequest(request) {
     try {
         return await db.get(request._id);

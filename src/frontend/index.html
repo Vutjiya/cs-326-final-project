@@ -45,29 +45,31 @@
                 Note: not UMass affiliated
             </div>
             <div id="request-view" class="view">
-                <div class="colored-block">
-                    <h1>Request a Ride</h1>
-                    <img class="header-img" src="https://static.vecteezy.com/system/resources/previews/018/974/668/original/cartoon-car-icon-png.png">
+                <div>
+                    <div class="colored-block">
+                        <h1>Request a Ride</h1>
+                        <img class="header-img" src="https://static.vecteezy.com/system/resources/previews/018/974/668/original/cartoon-car-icon-png.png">
+                    </div>
+                    <form id="request-form" class="request">
+                        <div class="user-input request">
+                            <label for="destination">Destination:</label>
+                            <input id="destination" class="user-input request box" type="text" name="destination" placeholder="Destination" list="municipalities">
+                            <datalist id="municipalities"></datalist>
+                        </div>
+                        <div class="user-input request">
+                            <label for="departure">Departure Time:</label>
+                            <input id="departure" class="user-input request box" type="datetime-local" name="departure">
+                        </div>
+                        <input id="submit-request" class="submit" type="submit" value="Submit Request">
+                    </form>
                 </div>
-                <form id="request-form" class="request">
-                    <div class="user-input request">
-                        <label for="destination">Destination:</label>
-                        <input id="destination" class="user-input request box" type="text" name="destination" placeholder="Destination" list="municipalities">
-                        <datalist id="municipalities"></datalist>
+                <div id="request-list-block">
+                    <h2>Pending Requests</h2>
+                    <ul id="latest-request"></ul>
+                    <div id="get-all-container">
+                        <button id="get-all-button">Get All Requests</button>
+                        <ul id="all-requests-list"></ul>
                     </div>
-                    <div class="user-input request">
-                        <label for="departure">Departure Time:</label>
-                        <input id="departure" class="user-input request box" type="datetime-local" name="departure">
-                    </div>
-                    <input class="submit" type="submit" value="Submit Request">
-                </form>
-            </div>
-            <div class="additional-block">
-                <h2>Pending Requests</h2>
-                <ul id="latest-request"></ul>
-                <div id="get-all-container">
-                    <button id="get-all-button">Get All Requests</button>
-                    <ul id="all-requests-list"></ul>
                 </div>
             </div>
             <div id="profile-view" class="view">
