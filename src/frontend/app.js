@@ -111,44 +111,8 @@ document.querySelectorAll("div.user-input.profile input").forEach(inputBox => {
     });
 });
 
-// // Removes the "Request Submitted" message if the form has been updated
-// document.querySelectorAll("div.user-input.request input").forEach(inputBox => {
-//     inputBox.addEventListener("input", () => {
-//         const requestMsgElm = document.getElementById("request-msg");
-//         if (requestMsgElm) {
-//             requestMsgElm.remove();
-//         }
-//     });
-// });
-
 // Saves profile info when clicking save profile button
 document.getElementById("save-profile").addEventListener("click", saveState);
-
-
-// Shows pop up when clicking save profile button
-// document.querySelector("form.profile").addEventListener("submit", (e) => {
-//     if (!document.getElementById("save-msg")) {
-//         const span = document.createElement("span");
-//         span.id = "save-msg";
-//         span.textContent = "Profile Saved!";
-//         e.currentTarget.appendChild(span);
-//     }
-//     e.preventDefault();
-// });
-
-// // Shows pop up when clicking request ride button
-// document.querySelector("form.request").addEventListener("submit", (e) => {
-//     const form = e.currentTarget
-//     let count = form.dataset.count ? parseInt(form.dataset.count) : 0;
-//     if (!document.getElementById("request-msg")) {
-//         const span = document.createElement("span");
-//         span.id = "request-msg";
-//         span.innerText = `Request Submitted!\n\nYou have submitted ${++count} request(s).`;
-//         form.appendChild(span);
-//     }
-//     form.dataset.count = count;
-//     // e.preventDefault();
-// });
 
 // Checks that user input is one of the options in the datalist for all input forms
 function isValidDestination() {
@@ -345,7 +309,6 @@ document.getElementById("get-all-button").addEventListener("click", async (e) =>
 
         const requests = await script.viewAllRequests();
         Object.values(requests).forEach(request => {
-            console.log(createRequestItem(request))
             allRequestsList.appendChild(createRequestItem(request));
         });
     } else {
@@ -375,11 +338,6 @@ function haversine(destination) {
 const rideOptionsList = document.getElementById("ride-options-list");
 
 document.getElementById("ride-options-button").addEventListener("click", async (event) => {
-    // const requests = await script.viewAllRequests();
-    // Object.values(requests).forEach(async request => {
-    //     rideOptionsList.appendChild(await createOptionsItem(request));
-    // });
-
     const getAllButton = event.currentTarget;
 
     if (getAllButton.classList.toggle("added-all")) {
@@ -428,21 +386,6 @@ async function createOptionsItem(requestData) {
     li.appendChild(innerList);
     return li;
 }
-
-// document.getElementById("create-profile").addEventListener("click", async (event) => {
-//     event.preventDefault();
-//     const formData = {};
-
-//     document.getElementById("profile-form").querySelectorAll("input").forEach(input => {
-//         if (input.type !== "submit") {
-//             const name = input.name;
-//             const value = input.value;
-//             formData[name] = value;
-//         }
-//     });
-
-//     const data = await script.createProfile(formData);
-// });
 
 document.getElementById("save-profile").addEventListener("click", async (event) => {
     event.preventDefault();

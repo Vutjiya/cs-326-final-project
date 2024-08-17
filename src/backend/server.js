@@ -1,4 +1,3 @@
-// TODO: write documentation and error handling
 import express from "express";
 import logger from "morgan";
 import * as db from "./database.js"

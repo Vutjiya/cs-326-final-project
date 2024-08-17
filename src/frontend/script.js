@@ -5,8 +5,6 @@ export class Script {
     URL = `http://localhost:${this.PORT}`;
     HEADER_FIELDS = { "Content-Type": "application/json" };
 
-    // TODO: implement error handling and write documentation
-
     async createRequest(formData) {
         const response = await fetch(`${this.URL}/create-request`, { 
             method: "POST", 
