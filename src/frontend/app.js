@@ -25,14 +25,6 @@ function saveState() {
     document.querySelectorAll("input[type='checkbox']").forEach(checkbox => 
         window.localStorage.setItem(checkbox.id, checkbox.checked)
     );
-
-    // document.querySelectorAll(".request.box").forEach(inputBox => 
-    //     window.localStorage.setItem(inputBox.id, JSON.stringify(inputBox.value))
-    // );
-
-    // document.querySelectorAll("input[type='checkbox']").forEach(checkbox => {
-    //     window.localStorage.setItem(checkbox.id, JSON.stringify(checkbox.checked))
-    // });
 }
 
 // Restores info in each form box on profile view
@@ -71,9 +63,6 @@ function restoreState() {
     document.querySelectorAll(".profile.box").forEach(inputBox => 
         inputBox.value = JSON.parse(window.localStorage.getItem(inputBox.id))
     );
-
-    // TODO: save state of other two fields also with inner html
-    
 }
 
 // Restore the view from local storage otherwise default to home view
@@ -83,13 +72,10 @@ window.addEventListener("load", () => {
     restoreState();
 });
 
-// Restores state upon reloading page
-// restoreState();
-
 const dropDown = document.getElementById("municipalities");
 
 // Load in each each municipality as an option for each datalist
-municipalities.forEach(municipality => {
+Object.keys(municipalities).forEach(municipality => {
     const option = document.createElement("option");
     option.value = municipality;
     option.classList.add("hometown-item");
@@ -140,15 +126,15 @@ document.getElementById("save-profile").addEventListener("click", saveState);
 
 
 // Shows pop up when clicking save profile button
-document.querySelector("form.profile").addEventListener("submit", (e) => {
-    if (!document.getElementById("save-msg")) {
-        const span = document.createElement("span");
-        span.id = "save-msg";
-        span.textContent = "Profile Saved!";
-        e.currentTarget.appendChild(span);
-    }
-    e.preventDefault();
-});
+// document.querySelector("form.profile").addEventListener("submit", (e) => {
+//     if (!document.getElementById("save-msg")) {
+//         const span = document.createElement("span");
+//         span.id = "save-msg";
+//         span.textContent = "Profile Saved!";
+//         e.currentTarget.appendChild(span);
+//     }
+//     e.preventDefault();
+// });
 
 // // Shows pop up when clicking request ride button
 // document.querySelector("form.request").addEventListener("submit", (e) => {
@@ -333,13 +319,13 @@ function parseDateTime(dateTimeString) {
     return `${dayOfWeek}, ${month} ${day}, ${year}, ${time} EST`;
 }
 
-const form = document.getElementById("request-form");
+const requestForm = document.getElementById("request-form");
 const script = new Script();
 
-form.addEventListener("submit", async (event) => {
+requestForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     const formData = {};
-    form.querySelectorAll("input").forEach(input => {
+    requestForm.querySelectorAll("input").forEach(input => {
         if (input.type !== "submit") {
             const name = input.name;
             const value = input.value;
@@ -357,8 +343,9 @@ document.getElementById("get-all-button").addEventListener("click", async (e) =>
     if (getAllButton.classList.toggle("added-all")) {
         getAllButton.innerText = "Hide All Requests"
 
-        const requests = await script.viewAll();
+        const requests = await script.viewAllRequests();
         Object.values(requests).forEach(request => {
+            console.log(createRequestItem(request))
             allRequestsList.appendChild(createRequestItem(request));
         });
     } else {
@@ -366,3 +353,233 @@ document.getElementById("get-all-button").addEventListener("click", async (e) =>
         allRequestsList.replaceChildren();
     }
 })
+
+function haversine(destination) {
+    const toRadians = degree => degree * Math.PI / 180.0;
+
+    const lat1 = toRadians(municipalities["Amherst"]["latitude"]);
+    const lon1 = toRadians(municipalities["Amherst"]["longitude"]);
+    const lat2 = toRadians(municipalities[destination]["latitude"]);
+    const lon2 = toRadians(municipalities[destination]["longitude"]);
+
+    const delLat = lat2 - lat1;
+    const delLon = lon2 - lon1;
+
+    const a = Math.sin(delLat / 2) ** 2 + 
+              Math.cos(lat1) * Math.cos(lat2) * 
+              Math.sin(delLon / 2) ** 2;
+
+    return 2 * 6371 * Math.asin(Math.sqrt(a));
+}
+
+const rideOptionsList = document.getElementById("ride-options-list");
+
+document.getElementById("ride-options-button").addEventListener("click", async (event) => {
+    // const requests = await script.viewAllRequests();
+    // Object.values(requests).forEach(async request => {
+    //     rideOptionsList.appendChild(await createOptionsItem(request));
+    // });
+
+    const getAllButton = event.currentTarget;
+
+    if (getAllButton.classList.toggle("added-all")) {
+        getAllButton.innerText = "Hide Ride Options"
+
+        const requests = await script.viewAllRequests();
+        Object.values(requests).forEach(async request => {
+        rideOptionsList.appendChild(await createOptionsItem(request));
+    });
+    } else {
+        getAllButton.innerText = "View Ride Options"
+        rideOptionsList.replaceChildren();
+    }
+});
+
+async function createOptionsItem(requestData) {
+    const destination = requestData.destination;
+
+    const li = document.createElement("li");
+    const innerList = document.createElement("ul");
+    const departureStr = parseDateTime(requestData.departure);
+    const div = document.createElement("div");
+    innerList.classList.add("li-drivers");
+
+    li.classList.add("options-item");
+    li.innerHTML = `
+        <b>Destination:</b> ${destination} <br>
+        <hr />
+        <b>Departure Time:</b> ${departureStr}
+        `;
+    
+    const profiles = await script.viewAllProfiles();
+    Object.values(profiles).forEach(profile => {
+        if (haversine(destination) <= profile.distance && requestData.departure === profile.availability) {
+            const innerListItem = document.createElement("li");
+            innerListItem.innerHTML = `
+                <b>Name:</b> ${profile.firstName} ${profile.lastName} <br>
+                <hr />
+                <b>Email:</b> ${profile.email} <br>
+                <hr />
+                <b>Phone Number:</b> ${profile.phoneNumber}
+            `;
+        innerList.appendChild(innerListItem);
+        }
+    });
+    li.appendChild(innerList);
+    return li;
+}
+
+// document.getElementById("create-profile").addEventListener("click", async (event) => {
+//     event.preventDefault();
+//     const formData = {};
+
+//     document.getElementById("profile-form").querySelectorAll("input").forEach(input => {
+//         if (input.type !== "submit") {
+//             const name = input.name;
+//             const value = input.value;
+//             formData[name] = value;
+//         }
+//     });
+
+//     const data = await script.createProfile(formData);
+// });
+
+document.getElementById("save-profile").addEventListener("click", async (event) => {
+    event.preventDefault();
+    const formData = {};
+
+    document.getElementById("profile-form").querySelectorAll("input").forEach(input => {
+        if (input.type !== "submit") {
+            const name = input.name;
+            const value = input.value;
+            formData[name] = value;
+        }
+    });
+
+    const data = await script.createProfile(formData);
+});
+
+const allProfilesList = document.getElementById("all-profiles-list");
+
+document.getElementById("get-all-profiles").addEventListener("click", async (event) => { 
+    event.preventDefault();
+    const getAllButton = event.currentTarget;
+
+    if (getAllButton.classList.toggle("added-all")) {
+        getAllButton.innerText = "Hide All Profiles"
+
+        const profiles = await script.viewAllProfiles();
+        Object.values(profiles).forEach(profile => {
+            allProfilesList.appendChild(createProfileItem(profile));
+        });
+    } else {
+        getAllButton.innerText = "View All Profiles"
+        allProfilesList.replaceChildren();
+    }
+});
+
+function createProfileItem(profileData) {
+    const li = document.createElement("li");
+    const availabilityStr = parseDateTime(profileData.availability);
+    const getButton = document.createElement("button");
+    const editButton = document.createElement("button");
+    const delButton = document.createElement("button");
+    const div = document.createElement("div");
+    div.classList.add("li-buttons");
+
+    li.classList.add("profile-item");
+    if (Object.hasOwn(profileData, "availability")) {
+        li.innerHTML = `
+                <b>Name:</b> ${profileData.firstName} ${profileData.lastName} <br>
+                <hr />
+                <b>Email:</b> ${profileData.email} <br>
+                <hr />
+                <b>Phone Number:</b> ${profileData.phoneNumber} <br>
+                <hr />
+                <b>Availability:</b> ${availabilityStr} <br>
+                <hr />
+                <b>Service Distance:</b> ${profileData.distance}
+            `;
+    } else {
+        li.innerHTML = `
+                <b>Name:</b> ${profileData.firstName} ${profileData.lastName} <br>
+                <hr />
+                <b>Email:</b> ${profileData.email} <br>
+                <hr />
+                <b>Phone Number:</b> ${profileData.phoneNumber}
+            `;
+    }
+
+    getButton.classList.add("li-button");
+    getButton.innerText = "Get";
+
+    editButton.classList.add("li-button");
+    editButton.innerText = "Edit";
+
+    delButton.classList.add("li-button");
+    delButton.innerText = "Delete";
+
+    getButton.addEventListener("click", async (event) => {
+        await script.readProfile(profileData);
+    });
+
+    editButton.addEventListener("click", async (event) => {
+        li.innerHTML = 
+        `
+            <form id="update-profile-form" class="profile">
+                <div class="user-input profile">
+                    <label for="first-name">First Name:</label>
+                    <input id="first-name" class="user-input profile box" type="text" name="firstName" placeholder="Johnny">
+                </div>
+                <div class="user-input profile">
+                    <label for="last-name">Last Name:</label>
+                    <input id="last-name" class="user-input profile box" type="text" name="lastName" placeholder="Appleseed">
+                </div>
+                <div class="user-input profile">
+                    <label for="email">Email:</label>
+                    <input id="email" class="user-input profile box" type="email" name="email" placeholder="jappleseed@umass.edu">
+                </div>
+                <div class="user-input profile">
+                    <label for="phone-number">Phone Number:</label>
+                    <input id="phone-number" class="user-input profile box" type="tel" name="phoneNumber" pattern="\d{3}-\d{3}-\d{4}" placeholder="123-456-7899">
+                </div>
+                <div class="user-input profile">
+                    <label for="driver-checkbox">Enlist to be a driver?</label>
+                    <input id="driver-checkbox" class="optional" type="checkbox">
+                </div>
+                <button id="cancel" type="button">Cancel</button>
+                <button form="update-profile-form">Update Request</button>
+            </form>
+        `;
+
+        document.getElementById("cancel").addEventListener("click", async (event) => {
+            li.replaceWith(createProfileItem(profileData));
+        });
+
+        document.getElementById("update-profile-form").addEventListener("submit", async (event) => {
+            event.preventDefault();
+            const newProfile = {};
+            event.currentTarget.querySelectorAll("input").forEach(input => {
+                if (input.type !== "submit") {
+                    const name = input.name;
+                    const value = input.value;
+                    newProfile[name] = value;
+                }
+            });
+
+            const data = await script.updateRequest({ profileData, newProfile });
+            li.replaceWith(createProfileItem(data));
+        });
+    });
+
+    delButton.addEventListener("click", async (event) => {
+        await script.deleteProfile(profileData);
+        li.remove();
+    });
+
+    div.appendChild(getButton);
+    div.appendChild(editButton);
+    div.appendChild(delButton);
+    li.appendChild(div);
+    return li;
+}

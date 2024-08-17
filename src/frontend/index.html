@@ -3,8 +3,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <!-- TODO: change title -->
-        <title>My Web Application</title>
+        <title>UMass Student Rideshares</title>
         <link rel="stylesheet" href="styles.css">
         <script type="module" src="app.js"></script>
         <script type="module" src="script.js"></script>
@@ -64,11 +63,17 @@
                     </form>
                 </div>
                 <div id="request-list-block">
-                    <h2>Pending Requests</h2>
+                    <h2>Latest Request</h2>
                     <ul id="latest-request"></ul>
                     <div id="get-all-container">
+                        <h2>All Requests</h2>
                         <button id="get-all-button">Get All Requests</button>
                         <ul id="all-requests-list"></ul>
+                    </div>
+                    <div id="ride-options">
+                        <h2>Ride Options</h2>
+                        <button id="ride-options-button">Get Ride Options</button>
+                        <ul id="ride-options-list"></ul>
                     </div>
                 </div>
             </div>
@@ -80,11 +85,11 @@
                 <form id="profile-form" class="profile">
                     <div class="user-input profile">
                         <label for="first-name">First Name:</label>
-                        <input id="first-name" class="user-input profile box" type="text" name="first-name" placeholder="Johnny">
+                        <input id="first-name" class="user-input profile box" type="text" name="firstName" placeholder="Johnny">
                     </div>
                     <div class="user-input profile">
                         <label for="last-name">Last Name:</label>
-                        <input id="last-name" class="user-input profile box" type="text" name="last-name" placeholder="Appleseed">
+                        <input id="last-name" class="user-input profile box" type="text" name="lastName" placeholder="Appleseed">
                     </div>
                     <div class="user-input profile">
                         <label for="email">Email:</label>
@@ -92,14 +97,18 @@
                     </div>
                     <div class="user-input profile">
                         <label for="phone-number">Phone Number:</label>
-                        <input id="phone-number" class="user-input profile box" type="tel" name="phone-number" pattern="\d{3}-\d{3}-\d{4}" placeholder="123-456-7899">
+                        <input id="phone-number" class="user-input profile box" type="tel" name="phoneNumber" pattern="\d{3}-\d{3}-\d{4}" placeholder="123-456-7899">
                     </div>
                     <div class="user-input profile">
                         <label for="driver-checkbox">Enlist to be a driver?</label>
                         <input id="driver-checkbox" class="optional" type="checkbox">
                     </div>
                     <input id="save-profile" type="submit" value="Save Profile">
-                </form>
+                    </form>
+                    <div id="get-all-profiles-container">
+                        <button id="get-all-profiles">View All Profiles</button>
+                        <ul id="all-profiles-list"></ul>
+                    </div>
             </div>
         </div>
     </body>

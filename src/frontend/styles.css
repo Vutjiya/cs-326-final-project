@@ -181,17 +181,20 @@ li {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    /* align-items: center; */
 }
 
 #get-all-button {
     /* width: fit-content;
     height: fit-content; */
     margin-bottom: 20px;
-    align-items: center;
 }
 
 #submit-request {
     display: block;
     margin: auto;
+}
+
+.li-drivers {
+    margin-top: 10px;
 }

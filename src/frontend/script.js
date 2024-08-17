@@ -8,7 +8,7 @@ export class Script {
     // TODO: implement error handling and write documentation
 
     async createRequest(formData) {
-        const response = await fetch(`${this.URL}/create`, { 
+        const response = await fetch(`${this.URL}/create-request`, { 
             method: "POST", 
             headers: this.HEADER_FIELDS,
             body: JSON.stringify(formData)
@@ -19,7 +19,7 @@ export class Script {
 
     async readRequest(formData) {
         const params = new URLSearchParams(formData).toString();
-        const response = await fetch(`${this.URL}/read?${params}`, { 
+        const response = await fetch(`${this.URL}/read-request?${params}`, { 
             method: "GET",
             headers: this.HEADER_FIELDS
         });
@@ -28,7 +28,7 @@ export class Script {
     }
 
     async updateRequest(formData) {
-        const response = await fetch(`${this.URL}/update`, { 
+        const response = await fetch(`${this.URL}/update-request`, { 
             method: "PUT",
             headers: this.HEADER_FIELDS,
             body: JSON.stringify(formData)
@@ -38,7 +38,7 @@ export class Script {
     }
 
     async deleteRequest(formData) {
-        const response = await fetch(`${this.URL}/delete`, { 
+        const response = await fetch(`${this.URL}/delete-request`, { 
             method: "DELETE",
             headers: this.HEADER_FIELDS,
             body: JSON.stringify(formData)
@@ -47,12 +47,61 @@ export class Script {
         return data;
     }
 
-    async viewAll() {
-        const response = await fetch(`${this.URL}/all`, { 
+    async viewAllRequests() {
+        const response = await fetch(`${this.URL}/all-requests`, { 
             method: "GET", 
             headers: this.HEADER_FIELDS
         });
         const data = await response.json();
         return data.requests;
+    }
+
+    async createProfile(formData) {
+        const response = await fetch(`${this.URL}/create-profile`, { 
+            method: "POST", 
+            headers: this.HEADER_FIELDS,
+            body: JSON.stringify(formData)
+        });
+        const { destination, departure } = await response.json();
+        return { destination, departure };
+    }
+
+    async readProfile(formData) {
+        const params = new URLSearchParams(formData).toString();
+        const response = await fetch(`${this.URL}/read-profile?${params}`, { 
+            method: "GET",
+            headers: this.HEADER_FIELDS
+        });
+        const data = await response.json();
+        return data;
+    }
+
+    async updateProfile(formData) {
+        const response = await fetch(`${this.URL}/update-profile`, { 
+            method: "PUT",
+            headers: this.HEADER_FIELDS,
+            body: JSON.stringify(formData)
+        });
+        const data = await response.json();
+        return data;
+    }
+
+    async deleteProfile(formData) {
+        const response = await fetch(`${this.URL}/delete-profile`, { 
+            method: "DELETE",
+            headers: this.HEADER_FIELDS,
+            body: JSON.stringify(formData)
+        });
+        const data = await response.json();
+        return data;
+    }
+
+    async viewAllProfiles() {
+        const response = await fetch(`${this.URL}/all-profiles`, { 
+            method: "GET", 
+            headers: this.HEADER_FIELDS
+        });
+        const data = await response.json();
+        return data.profiles;
     }
 }
